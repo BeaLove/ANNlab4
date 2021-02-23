@@ -1,6 +1,7 @@
 from util import *
 from rbm import RestrictedBoltzmannMachine 
 from dbn import DeepBeliefNet
+import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
 
@@ -20,7 +21,11 @@ if __name__ == "__main__":
                                      batch_size=10
     )
 
-    rbm.cd1(visible_trainset=train_imgs, n_iterations=int(20*(len(train_imgs)/rbm.batch_size)))
+    n_iterations = int(20*(len(train_imgs)/rbm.batch_size))
+    x, recon_loss = rbm.cd1(visible_trainset=train_imgs, n_iterations=n_iterations, avg_recon_loss=True)
+
+    plt.plot(x, recon_loss)
+    plt.show()
     
     ''' deep- belief net '''
 

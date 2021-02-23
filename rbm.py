@@ -67,7 +67,9 @@ class RestrictedBoltzmannMachine():
         return
 
         
-    def cd1(self,visible_trainset, n_iterations=10000):
+    def cd1(self,visible_trainset, n_iterations=10000, avg_recon_loss=False):
+        x = []
+        recon_loss = []
         #k_iters = 1
         """Contrastive Divergence with k=1 full alternating Gibbs sampling
 
@@ -104,7 +106,6 @@ class RestrictedBoltzmannMachine():
             self.update_params(v_0, h_0_act, v_1_prob, h_1_prob)
 
             # visualize once in a while when visible layer is input images
-            reconstruction_batch = v_1_act
             if it % self.rf["period"] == 0 and self.is_bottom:
 
                 viz_rf(weights=self.weight_vh[:,self.rf["ids"]].reshape((self.image_size[0],self.image_size[1],-1)), it=it, grid=self.rf["grid"])
@@ -113,9 +114,18 @@ class RestrictedBoltzmannMachine():
 
             if it % self.print_period == 0 :
                 #only gets reconstruction loss of one minibatch
-                print ("iteration=%7d recon_loss=%4.4f"%(it, np.linalg.norm(mini_batches[idx] - reconstruction_batch)))
+                if avg_recon_loss:
+                    x += [it]
+                    h_0_prob, h_0_act = self.get_h_given_v(visible_trainset)
+                    v_1_prob, v_1_act = self.get_v_given_h(h_0_act)
+                    h_1_prob, h_1_act = self.get_h_given_v(v_1_act)
+                    recon_loss += [np.mean(np.abs(visible_trainset - v_1_act))]
+                    print ("iteration=%7d recon_loss=%4.4f"%(it, recon_loss[-1]))
+                else:
+                    reconstruction_batch = v_1_act
+                    print ("iteration=%7d recon_loss=%4.4f"%(it, np.mean(np.abs(mini_batches[idx] - reconstruction_batch))))
 
-        return
+        return x, recon_loss
     
 
     def update_params(self,v_0,h_0,v_k,h_k):
