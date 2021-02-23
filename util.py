@@ -43,6 +43,7 @@ def sample_binary(on_probabilities):
     activations = 1. * ( on_probabilities >= np.random.random_sample(size=on_probabilities.shape) )
     return activations
 
+
 def sample_categorical(probabilities):
 
     """ 
