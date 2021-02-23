@@ -3,6 +3,34 @@ from rbm import RestrictedBoltzmannMachine
 from dbn import DeepBeliefNet
 import matplotlib.pyplot as plt
 
+def experiment_number_of_nodes():
+    hidden_nodes = [500, 450, 400, 350, 300, 250, 200, 150, 100]
+    x = []
+    results = []
+
+    for hn in hidden_nodes:
+        rbm = RestrictedBoltzmannMachine(ndim_visible=image_size[0]*image_size[1],
+                                         ndim_hidden=hn,
+                                         is_bottom=True,
+                                         image_size=image_size,
+                                         is_top=False,
+                                         n_labels=10,
+                                         batch_size=10
+        )
+
+
+        n_iterations = int(20*(len(train_imgs)/rbm.batch_size))
+        x, recon_loss = rbm.cd1(visible_trainset=train_imgs, n_iterations=n_iterations, avg_recon_loss=True)
+
+        results += [recon_loss]
+
+    for idx, loss in enumerate(results):
+        plt.plot(x, loss, label="Error curve with " + str(hidden_nodes[idx]) + " hidden nodes")
+    plt.xlabel("Number of iterations")
+    plt.ylabel("Mean absolute error")
+    plt.legend()
+    plt.show()
+
 if __name__ == "__main__":
 
     image_size = [28,28]
@@ -12,8 +40,10 @@ if __name__ == "__main__":
     
     print ("\nStarting a Restricted Boltzmann Machine..")
 
+    experiment_number_of_nodes()
+
     rbm = RestrictedBoltzmannMachine(ndim_visible=image_size[0]*image_size[1],
-                                     ndim_hidden=200,
+                                     ndim_hidden=500,
                                      is_bottom=True,
                                      image_size=image_size,
                                      is_top=False,
@@ -62,3 +92,4 @@ if __name__ == "__main__":
         digit_1hot = np.zeros(shape=(1,10))
         digit_1hot[0,digit] = 1
         dbn.generate(digit_1hot, name="dbn")
+
