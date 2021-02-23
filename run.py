@@ -19,14 +19,8 @@ if __name__ == "__main__":
                                      n_labels=10,
                                      batch_size=10
     )
-    epochs = 10
-    #for testing:
-    portion = int(len(train_imgs)/10)
-    trial_data = train_imgs[:portion, :]
-    n_iterations = int(len(trial_data)/rbm.batch_size)
-    for epoch in range(epochs):
-        rbm.cd1(visible_trainset=trial_data, n_iterations=n_iterations)
-        print("epoch: ", epoch)
+
+    rbm.cd1(visible_trainset=train_imgs, n_iterations=int(20*(len(train_imgs)/rbm.batch_size)))
     
     ''' deep- belief net '''
 
