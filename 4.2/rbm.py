@@ -215,8 +215,8 @@ class RestrictedBoltzmannMachine():
             activations_data = sample_binary(probabilities_data) ### correct??
             activations_labels = sample_categorical(probabilities_labels) ###correct???
 
-            probabilities = np.concatenate(probabilities_data, probabilities_labels, axis=1)
-            activations = np.concatenate(activations_data, activations_labels, axis=1)
+            probabilities = np.concatenate((probabilities_data, probabilities_labels), axis=1)
+            activations = np.concatenate((activations_data, activations_labels), axis=1)
             
             #pass
             
@@ -258,6 +258,8 @@ class RestrictedBoltzmannMachine():
         n_samples = visible_minibatch.shape[0]
 
         # [TODO TASK 4.2] perform same computation as the function 'get_h_given_v' but with directed connections (replace the zeros below) 
+        #print(visible_minibatch.shape)
+        #print(self.weight_v_to_h.shape)
         probabilities = sigmoid(visible_minibatch @ self.weight_v_to_h + self.bias_h)
         activations = sample_binary(probabilities)
         
