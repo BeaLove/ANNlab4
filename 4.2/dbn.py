@@ -145,9 +145,9 @@ class DeepBeliefNet():
           lbl_trainset: label data shaped (size of training set, size of label layer)
           n_iterations: number of iterations of learning (each iteration learns a mini-batch)
         """
-
+        print("train greedy")
         try :
-
+            print("try clause")
             self.loadfromfile_rbm(loc="trained_rbm",name="vis--hid")
             self.rbm_stack["vis--hid"].untwine_weights()            
             
@@ -159,15 +159,16 @@ class DeepBeliefNet():
         except IOError :
 
             # [TODO TASK 4.2] use CD-1 to train all RBMs greedily
-        
-            print ("training vis--hid")
-            """ 
-            CD-1 training for vis--hi d 
-            """
+            print("entered train greedy layerwise")
+            print ("bladibla training vis--hid")
+            print("hello")
+            """ CD-1 training for vis--hi d """
+            print("starting first layer")
             self.rbm_stack["vis--hid"].cd1(vis_trainset,n_iterations)         
             self.savetofile_rbm(loc="trained_rbm",name="vis--hid")
+            print("done first layer")
 
-            print ("training hid--pen")
+            print (" bladibla training hid--pen")
             """ 
             CD-1 training for hid--pen 
             """            

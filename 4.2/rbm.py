@@ -296,7 +296,7 @@ class RestrictedBoltzmannMachine():
                         
             # [TODO TASK 4.2] performs same computaton as the function 'get_v_given_h' but with directed connections (replace the pass and zeros below) 
             # Directed connections!?            
-            probabilities = sigmoid(visible_minibatch @ self.weight_h_to_v + self.bias_h)
+            probabilities = sigmoid(hidden_minibatch @ self.weight_h_to_v + self.bias_h)
             activations = sample_binary(probabilities)
         
         return probabilities, activations    
