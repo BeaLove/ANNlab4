@@ -4,7 +4,7 @@ from dbn import DeepBeliefNet
 import matplotlib.pyplot as plt
 
 def experiment_number_of_nodes():
-    hidden_nodes = [500, 450, 400, 350, 300, 250, 200]
+    hidden_nodes = [500, 450, 400, 350, 300, 250, 200, 150, 100]
     x = []
     results = []
 
@@ -28,7 +28,6 @@ def experiment_number_of_nodes():
         plt.plot(x, loss, label="Error curve with " + str(hidden_nodes[idx]) + " hidden nodes")
     plt.xlabel("Number of iterations")
     plt.ylabel("Mean absolute error")
-    plt.axis([])
     plt.legend()
     plt.show()
 
