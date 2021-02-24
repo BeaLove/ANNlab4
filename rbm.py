@@ -267,8 +267,9 @@ class RestrictedBoltzmannMachine():
         n_samples = visible_minibatch.shape[0]
 
         # [TODO TASK 4.2] perform same computation as the function 'get_h_given_v' but with directed connections (replace the zeros below) 
-        
-        return np.zeros((n_samples,self.ndim_hidden)), np.zeros((n_samples,self.ndim_hidden))
+        probabilities =  sigmoid(visible_minibatch @ self.weight_v_to_h + self.bias_v)
+        activations = sample_binary(probabilities)
+        return probabilities, activations
 
 
     def get_v_given_h_dir(self,hidden_minibatch):
@@ -308,9 +309,10 @@ class RestrictedBoltzmannMachine():
                         
             # [TODO TASK 4.2] performs same computaton as the function 'get_v_given_h' but with directed connections (replace the pass and zeros below)             
 
-            pass
+            probabilities = sigmoid(hidden_minibatch @ self.weight_h_to_v + self.bias_h)
+            activations = sample_binary(probabilities)
             
-        return np.zeros((n_samples,self.ndim_visible)), np.zeros((n_samples,self.ndim_visible))        
+        return probabilities, activations
         
     def update_generate_params(self,inps,trgs,preds):
         

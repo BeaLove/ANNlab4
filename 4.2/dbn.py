@@ -164,6 +164,7 @@ class DeepBeliefNet():
             """ 
             CD-1 training for vis--hi d 
             """
+            #first train layer one on visible trainset
             self.rbm_stack["vis--hid"].cd1(vis_trainset,n_iterations)         
             self.savetofile_rbm(loc="trained_rbm",name="vis--hid")
 
@@ -172,9 +173,9 @@ class DeepBeliefNet():
             CD-1 training for hid--pen 
             """            
             self.rbm_stack["vis--hid"].untwine_weights()  
-
+            #hidden layer output from previous serves as input to next
             hid = self.rbm_stack['vis--hid'].get_h_given_v_dir(vis_trainset)[1]
-            self.rbm_stack['hid--pen'].cd1(hidm,n_iterations)
+            self.rbm_stack['hid--pen'].cd1(hid,n_iterations)
 
 
             self.savetofile_rbm(loc="trained_rbm",name="hid--pen")            
@@ -187,7 +188,7 @@ class DeepBeliefNet():
             self.rbm_stack["hid--pen"].untwine_weights()
             pen = self.rbm_stack['hid--pen'].get_h_given_v_dir(hid)[1]
             pen = np.concatenate((pen, lbl_trainset), axis = 1)
-
+            #last layer takes in hidden layer output from previous plus layers
             self.rbm_stack['pen+lbl--top'].cd1(pen, n_iterations)
             self.savetofile_rbm(loc="trained_rbm",name="pen+lbl--top")            
 
