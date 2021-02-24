@@ -86,7 +86,7 @@ class RestrictedBoltzmannMachine():
         mini_batches = []
         for n in range(0, n_samples, self.batch_size):
             mini_batches.append(visible_trainset[n:n+self.batch_size, :])
-
+        energy_averages = np.zeros((len(mini_batches)))
         for it in range(n_iterations):
             idx = it % len(mini_batches)
 
@@ -106,24 +106,30 @@ class RestrictedBoltzmannMachine():
             self.update_params(v_0, h_0_act, v_1_prob, h_1_prob)
 
             # visualize once in a while when visible layer is input images
+            reconstruction_batch = v_1_act
             if it % self.rf["period"] == 0 and self.is_bottom:
 
                 viz_rf(weights=self.weight_vh[:,self.rf["ids"]].reshape((self.image_size[0],self.image_size[1],-1)), it=it, grid=self.rf["grid"])
-
+                viz_reconstruction(v_0, reconstruction_batch, it)
             # print progress
+            #compute energy
 
+            energy_averages[idx] = self.avg_energy_minibatch(v_1_act, h_1_act)
+            if it % len(mini_batches) == 0:
+                print("new epoch, mean energy of system = %4.4f"%(np.mean(energy_averages)))
             if it % self.print_period == 0 :
                 #only gets reconstruction loss of one minibatch
                 if avg_recon_loss:
                     x += [it]
                     h_0_prob, h_0_act = self.get_h_given_v(visible_trainset)
                     v_1_prob, v_1_act = self.get_v_given_h(h_0_act)
-                    h_1_prob, h_1_act = self.get_h_given_v(v_1_act)
+                    #h_1_prob, h_1_act = self.get_h_given_v(v_1_act)
                     recon_loss += [np.mean(np.abs(visible_trainset - v_1_act))]
                     print ("iteration=%7d recon_loss=%4.4f"%(it, recon_loss[-1]))
                 else:
                     reconstruction_batch = v_1_act
                     print ("iteration=%7d recon_loss=%4.4f"%(it, np.mean(np.abs(mini_batches[idx] - reconstruction_batch))))
+                #print ("iteration=%7d recon_loss=%4.4f"%(it, np.linalg.norm(mini_batches[idx] - reconstruction_batch)))
 
         return x, recon_loss
     
@@ -348,3 +354,9 @@ class RestrictedBoltzmannMachine():
         
         return    
 
+    def avg_energy_minibatch(self, v, h):
+        part1 = self.bias_v.reshape(1,-1) @ v.T
+        part2 = self.bias_h.reshape(1,-1) @ h.T
+        part3 = v @ self.weight_vh @ h.T
+
+        return np.mean(-part1 - part2 - part3)

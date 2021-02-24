@@ -123,3 +123,16 @@ def stitch_video(fig,imgs):
     import matplotlib.animation as animation
     
     return animation.ArtistAnimation(fig, imgs, interval=100, blit=True, repeat=False)    
+
+def viz_reconstruction(v_0, v_1, it):
+    fig, axs = plt.subplots(10, 2, figsize=(10,2))
+    #for v in range(len(v_0)):
+    for x in range(10):
+        axs[x,0].set_xticks([]);
+        axs[x,0].set_yticks([]);
+        axs[x,1].set_xticks([]);
+        axs[x,1].set_yticks([]);
+        axs[x,0].imshow(v_0[x].reshape(28,28))
+        axs[x,1].imshow(v_1[x].reshape(28,28))
+    plt.savefig("reconst.iter%0d.png"%it)
+    plt.close()
