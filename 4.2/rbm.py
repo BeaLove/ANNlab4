@@ -201,20 +201,23 @@ class RestrictedBoltzmannMachine():
 
             # [TODO TASK 4.1] compute probabilities and activations (samples from probabilities) of visible layer (replace the pass below). \
             # Note that this section can also be postponed until TASK 4.2, since in this task, stand-alone RBMs do not contain labels in visible layer.
-
-            """
+            
             weights_dot = np.dot(hidden_minibatch, np.transpose(self.weight_vh))
+            
             result = self.bias_v + weights_dot
             data = result[:, :-self.n_labels]
             labels = result[:, -self.n_labels:]
+
             ### are we supposed to run the labels through the operation as well? whats the activation function for the labels
             probabilities_data = sigmoid(data)
             probabilities_labels = sigmoid(labels) ##correct??
+
             activations_data = sample_binary(probabilities_data) ### correct??
             activations_labels = sample_categorical(probabilities_labels) ###correct???
+
             probabilities = np.concatenate(probabilities_data, probabilities_labels, axis=1)
             activations = np.concatenate(activations_data, activations_labels, axis=1)
-            """
+            
             #pass
             
         else:
@@ -255,14 +258,12 @@ class RestrictedBoltzmannMachine():
         n_samples = visible_minibatch.shape[0]
 
         # [TODO TASK 4.2] perform same computation as the function 'get_h_given_v' but with directed connections (replace the zeros below) 
-        probabilities = sigmoid(visible_minibatch @ self.weight_vh + self.bias_h)
+        probabilities = sigmoid(visible_minibatch @ self.weight_v_to_h + self.bias_h)
         activations = sample_binary(probabilities)
         
         return probabilities, activations 
 
     def get_v_given_h_dir(self,hidden_minibatch):
-
-
         """Compute probabilities p(v|h) and activations v ~ p(v|h)
         Uses directed weight "weight_h_to_v" and bias "bias_v"
         
@@ -272,7 +273,6 @@ class RestrictedBoltzmannMachine():
            tuple ( p(v|h) , v) 
            both are shaped (size of mini-batch, size of visible layer)
         """
-        
         assert self.weight_h_to_v is not None
         
         n_samples = hidden_minibatch.shape[0]
@@ -296,7 +296,7 @@ class RestrictedBoltzmannMachine():
                         
             # [TODO TASK 4.2] performs same computaton as the function 'get_v_given_h' but with directed connections (replace the pass and zeros below) 
             # Directed connections!?            
-            probabilities = sigmoid(visible_minibatch @ self.weight_vh + self.bias_h)
+            probabilities = sigmoid(visible_minibatch @ self.weight_h_to_v + self.bias_h)
             activations = sample_binary(probabilities)
         
         return probabilities, activations    
