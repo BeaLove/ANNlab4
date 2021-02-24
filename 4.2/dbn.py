@@ -174,7 +174,7 @@ class DeepBeliefNet():
             self.rbm_stack["vis--hid"].untwine_weights()  
 
             hid = self.rbm_stack['vis--hid'].get_h_given_v_dir(vis_trainset)[1]
-            self.rbm_stack['hid--pen'].cd1(hidm,n_iterations)
+            self.rbm_stack['hid--pen'].cd1(hid,n_iterations)
 
 
             self.savetofile_rbm(loc="trained_rbm",name="hid--pen")            

@@ -39,11 +39,8 @@ if __name__ == "__main__":
     
     ''' greedy layer-wise training '''
 
-    x, recon_loss = dbn.train_greedylayerwise(vis_trainset=train_imgs, lbl_trainset=train_lbls, n_iterations=10000)
+    dbn.train_greedylayerwise(vis_trainset=train_imgs, lbl_trainset=train_lbls, n_iterations=10000)
     
-    plt.plot(x, recon_loss)
-    plt.show()
-
     dbn.recognize(train_imgs, train_lbls)
     
     dbn.recognize(test_imgs, test_lbls)
