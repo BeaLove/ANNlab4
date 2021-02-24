@@ -38,8 +38,15 @@ if __name__ == "__main__":
     )
     
     ''' greedy layer-wise training '''
-
-    dbn.train_greedylayerwise(vis_trainset=train_imgs, lbl_trainset=train_lbls, n_iterations=10000)
+    p  = int(len(train_imgs))
+    print(train_imgs.shape)
+    print(train_lbls.shape)
+    train_imgs = train_imgs[:p,:]
+    train_lbls = train_lbls[:p,:]
+    print(train_imgs.shape)
+    print(train_lbls.shape)
+    
+    dbn.train_greedylayerwise(vis_trainset=train_imgs, lbl_trainset=train_lbls, n_iterations=1000)
     
     dbn.recognize(train_imgs, train_lbls)
     
