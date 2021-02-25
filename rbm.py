@@ -56,10 +56,10 @@ class RestrictedBoltzmannMachine():
         
         self.momentum = 0.7
 
-        self.print_period = 1500
+        self.print_period = 5000
         
         self.rf = { # receptive-fields. Only applicable when visible layer is input data
-            "period" : 1500, # iteration period to visualize
+            "period" : 5000, # iteration period to visualize
             "grid" : [5,5], # size of the grid
             "ids" : np.random.randint(0,self.ndim_hidden,25) # pick some random hidden units
             }
@@ -80,7 +80,7 @@ class RestrictedBoltzmannMachine():
         print("learning CD1")
         
         n_samples = visible_trainset.shape[0]
-        np.random.shuffle(visible_trainset)
+        #np.random.shuffle(visible_trainset)
         #batch = n_samples/self.batch_size
         mini_batches = []
         for n in range(0, n_samples, self.batch_size):
@@ -167,8 +167,8 @@ class RestrictedBoltzmannMachine():
         n_samples = visible_minibatch.shape[0]
 
         # [TODO TASK 4.1] compute probabilities and activations (samples from probabilities) of hidden layer (replace the zeros below) 
-        print("weights: ", self.weight_vh.shape)
-        print("mininbatch input: ", visible_minibatch.shape)
+        #print("weights: ", self.weight_vh.shape)
+        #print("mininbatch input: ", visible_minibatch.shape)
         probabilities = sigmoid(visible_minibatch @ self.weight_vh + self.bias_h)
         activations = sample_binary(probabilities)
         
