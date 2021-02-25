@@ -39,19 +39,8 @@ if __name__ == "__main__":
     epochs = 10
     ''' greedy layer-wise training '''
     portion = int(len(train_imgs)/10)
-    #portion_lbls = int(len(train_lbls)/10)
-    train_imgs_test = train_imgs[:portion,:]
-    train_lbls_test = train_lbls[:portion,:]
-    # shuffle
-    '''traindata_lbls = np.concatenate((train_imgs, train_lbls), axis=1)
-    np.shuffle(traindata_lbls, axis=0)
-    train_imgs = traindata_lbls[:,:-1]
-    train_lbls = traindata_lbls[:,-1]'''
     n_iterations = int(epochs * (len(train_imgs) / dbn.batch_size))
     dbn.train_greedylayerwise(vis_trainset=train_imgs, lbl_trainset=train_lbls, n_iterations=n_iterations)
-
-    #plt.plot(x, recon_loss)
-    #plt.show()
 
     dbn.recognize(train_imgs, train_lbls)
     
